@@ -16,9 +16,9 @@ public class Book {
 		rating = -1;
 	}
 	
-	// rating has to be between 0-10
+	// rating has to be between 1-5
 	public void setRating(int rate) {
-		if (rate < 11 && rate > -1) {
+		if (rate < 6 && rate > 0) {
 			rating = rate;
 		} else {
 			throw new IllegalArgumentException();
@@ -44,6 +44,13 @@ public class Book {
 	
 	public String getAuthor() {
 		return author;
+	}
+
+	public String toString() {
+		if (rating == -1) {
+			return bookName + ": " author + "\nRating: N/A";
+		}
+		return bookName + ": " author + "\nRating: " + Integer.toString(rating);
 	}
 	
 }
