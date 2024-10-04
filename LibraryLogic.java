@@ -22,6 +22,18 @@ public class LibraryLogic {
 			System.out.println("There were no books in your library with the given condition");
 		}
 	}
+
+	static void printHelp() {
+		System.out.println();
+		System.out.println("To add a single book, please enter the command 'addBook'");
+		System.out.println("To add multiple books, please enter the command 'addBooks'");
+		System.out.println("To search for a book, please enter the command 'search'");
+		System.out.println("To update the status of a book you've read, please enter the command 'setToRead'");
+		System.out.println("To rate a book, please enter the command 'rate'");
+		System.out.println("To get a sorted list of all the books in the library, please enter the command 'getBooks'");
+		System.out.println("If you are feeling lucky and want us to suggest an unread book, please enter the command 'suggestRead'");
+		System.out.println("To leave the library, please enter the command 'exit'");
+	}
 	
 	// Author: Aarush
 	static void setRead(ArrayList<Book> books, String title, String author) {
@@ -78,7 +90,7 @@ public class LibraryLogic {
 	}
 */
 
-	public static ArrayList<Book> sortByTitle(ArrayList<Book> books){
+	static ArrayList<Book> sortByTitle(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
 		Collections.sort(sortedBooks, new SortByName());
 		return sortedBooks;
@@ -110,7 +122,7 @@ public class LibraryLogic {
 		return sortedBooks;
 	}
 */
-	public static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
+	static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
 		Collections.sort(sortedBooks, new SortByAuthor());
 		return sortedBooks;
@@ -165,7 +177,7 @@ public class LibraryLogic {
 			if (readFlag) System.out.println("You haven't read any books in your library.");
 			else System.out.println("You have read every book in the library");
 		}
-		//Collection.sort(sortedBooks); maybe have it by rating
+		Collection.sort(sortedBooks, new SortByName()); // returns the books in the default sorted by title
 		return sortedBooks;
 	
 	}
