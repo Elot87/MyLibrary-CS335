@@ -53,104 +53,17 @@ public class LibraryLogic {
 		}
 	}
 
-/*	
-	// to be changed to Comparator class
-	public static ArrayList<Book> sortByTitle(ArrayList<Book> books){
-		ArrayList<Book> sortedBooks = new ArrayList<Book>();
-	
-		// *Here, I am using a public "books" variable that may or may not exist, but there has got to be some name for the list of books
-		for (int i=0; i<books.size(); i++){
-			if (i == 0){
-				sortedBooks.add(books.get(i));
-				continue;
-			}
-	
-			for (int j=0; j<sortedBooks.size(); j++){
-				if (sortedBooks.get(j).getName().compareTo(books.get(i).getName()) > 0){
-					sortedBooks.add(j, books.get(i));
-					break;
-				}
-			}
-	
-			if (i == sortedBooks.size()) sortedBooks.add(books.get(i));
-		}
-	
-		return sortedBooks;
-	}
-*/
-
 	static ArrayList<Book> sortByTitle(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
 		Collections.sort(sortedBooks, new SortByName());
 		return sortedBooks;
 	}
 
-	/*
-	public static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
-		ArrayList<Book> sortedBooks = new ArrayList<Book>();
-	
-		// *same stipulation as prior
-		for (int i=0; i<books.size(); i++){
-			if (i == 0){
-				sortedBooks.add(books.get(i));
-				continue;
-			}
-		
-			for (int j=0; j<sortedBooks.size(); j++){
-				if (sortedBooks.get(j).getAuthor().compareTo(books.get(i).getAuthor()) > 0){
-					sortedBooks.add(j, books.get(i));
-					break;
-					
-				}
-			}
-			
-			// if nothing was added, add the next book. I do not know if this is a necessary step.
-			if (i == sortedBooks.size()) sortedBooks.add(books.get(i));
-		}
-		
-		return sortedBooks;
-	}
-*/
 	static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
 		Collections.sort(sortedBooks, new SortByAuthor());
 		return sortedBooks;
 	}
-
-	/*
-	public static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
-		ArrayList<Book> sortedBooks = new ArrayList<Book>();
-		
-		// *again, same stipulation
-		for (int i=0; i<books.size(); i++){
-			if (i == 0){
-				sortedBooks.add(books.get(i));
-			}
-	
-			for (int j=0; j<sortedBooks.size(); j++){
-				if (sortedBooks.get(j).getRead() == readFlag){
-					sortedBooks.add(j, books.get(i));
-					break;
-				}
-			}
-	
-			if (sortedBooks.size() == i) sortedBooks.add(books.get(i));
-		}
-		
-		return sortedBooks;
-	
-	}
-	
-	
-
-	public static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
-		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
-		if (readFlag) Collections.sort(sortedBooks, new SortByRead());
-		else Collections.sort(sortedBooks, new SortByUnread());
-		return sortedBooks;
-
-	}
-	*/
 	
 	// Put in a couple of output messages to indicate the list is empty. Can change the message if needed
 	static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
