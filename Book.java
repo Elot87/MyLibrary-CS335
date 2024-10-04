@@ -77,20 +77,3 @@ class SortByName implements Comparator<Book>{
 		return a.getName().compareTo(b.getName());
 	}
 }
-
-class SortByRead implements Comparator<Book>{
-	public int compare(Book a, Book b){
-		int n = a.getRead() ? 1:0;
-		int m = b.getRead() ? 1:0;
-		return n-m;
-	}
-}
-
-class SortByUnread implements Comparator<Book>{
-	public int compare(Book a, Book b){
-		int n = a.getRead() ? 1:0;
-		int m = b.getRead() ? 1:0;
-		return m-n;
-	}
-
-}
