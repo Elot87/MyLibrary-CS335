@@ -293,8 +293,33 @@ public class LibraryLogic {
 
 		return books;
 	}
-	
-	
+
+	// @pre {"title", "author", "read", "unread"}.contains(sortingMethod)
+	public static ArrayList<Book> getSortedBooks(ArrayList<Book> books, String sortingMethod){
+		ArrayList<Book> sorted = new ArrayList<Book>();
+		switch(sortingMethod){
+			case "title":
+				sorted = sortByTitle(books);
+				break;
+			case "author":
+				sorted = sortByAuthor(books);
+				break;
+			case "read":
+				sorted = sortByRead(books, true);
+				break;
+			case "unread":
+				sorted = sortByRead(books, false);
+				break;
+			default:
+				System.out.println("Error, Input Validation Failed"); 
+				return null;
+				// precondition broken
+		}
+
+		return sorted;
+
+		
+	}
 
 
 
