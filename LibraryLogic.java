@@ -262,7 +262,7 @@ public class LibraryLogic {
 	}
 
 	// returns null on failure
-	static Scanner getFile(Scanner scanner){
+	public static Scanner getFile(Scanner scanner){
 		File file;
 		try {
 			file = new File(input.nextLine());
@@ -275,6 +275,25 @@ public class LibraryLogic {
 
 		return fromFile;
 	}
+
+	public static ArrayList<Book> getBooksFromFile(Scanner scanner){
+		String input = scanner.nextLine();
+		Scanner fromFile = getFile(input);
+		ArrayList<Book> books = new ArrayList<Book>();
+		
+		String cur;
+		int index;
+		while (fromFile.hasNextLine()){
+			cur = fromFile.nextLine();
+			index = cur.indexOf(';');
+			if (index == -1) continue;
+			books.add(new Book(cur.substring(0, index), cur.substring(index+1)));
+		}
+		fromFile.close();
+
+		return books;
+	}
+	
 	
 
 
