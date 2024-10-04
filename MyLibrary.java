@@ -197,32 +197,37 @@ public class MyLibrary {
 
 	
 	}
-	
-	private static void rate(Scanner scanner){
 
+	// prompts user for the desired book, clarifying if there are multiple books with that name, and sets the rating for that book based on the user's request
+	// 
+	// Although some simple control flow logic remains,
+	// the process of selecting the book and getting information from the user is abstracted into the LibraryLogic class
+	private static void rate(Scanner scanner){
 		Book bookToRate;	
 	
 		System.out.println("What book would you like to rate?");
 		String chosenBook = scanner.nextLine();
 		
 		ArrayList<Book> booksWithSelectedName = LibraryLogic.getBooksWithName(chosenBook, books);
-		
+
+		// If no book with that name exist
 		if (booksWithSelectedName.size() == 0){
 			System.out.println("\"" + chosenBook + "\" does not appear to exist.");
 			System.out.println("If you would like to add it, use the addBook command");
-			;
 			return;
+
+		// If many books with that name exist
 		} else if (booksWithSelectedName.size() > 1){
 			System.out.println("It looks like there are multiple books with that title.");
-			
 			bookToRate = LibraryLogic.selectItem(scanner, "Please select a book by entering the corresponding number.", booksWithSelectedName);
+			
+		// if exactly one book with that name exists
 		} else {
-			// index 0 being the only option makes this case easy :)
 			bookToRate = booksWithSelectedName.get(0);
 		}
-	
+
 		int rating = LibraryLogic.selectInt(scanner, "What would you like to rate the book? (integer 1-5)", 1, 5);
 		bookToRate.setRating(rating);
 	}
 	
-	}
+}
