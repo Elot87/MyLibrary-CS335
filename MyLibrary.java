@@ -121,26 +121,7 @@ public class MyLibrary {
 		if (books.size() == 0) {System.out.println("There are no books in your Library");}
 		String[] options = {"title", "author", "read", "unread"};
 		String selection = LibraryLogic.selectItem(input, "How would you like the books sorted?", options);
-	
-		ArrayList<Book> sorted = new ArrayList<Book>();
-		switch(selection){
-			case "title":
-				sorted = LibraryLogic.sortByTitle(books);
-				break;
-			case "author":
-				sorted = LibraryLogic.sortByAuthor(books);
-				break;
-			case "read":
-				sorted = LibraryLogic.sortByRead(books, true);
-				break;
-			case "unread":
-				sorted = LibraryLogic.sortByRead(books, false);
-				break;
-			default:
-				System.out.println("Error, Input Validation Failed"); 
-				return;
-			// may need a default case to handle the imaginary case where the input validation doesn't work, just so that Java is happy :)
-		}
+		ArrayList<Book> sorted = LibraryLogic.getSortedBooks(new ArrayList<Book>(books));
 		if (sorted.size() == 0) {
 			return;
 		}
@@ -149,9 +130,12 @@ public class MyLibrary {
 			System.out.println(sorted.get(i).toString());
 		}	
 	}
-	
+
+	// Picks a random unread book and presents it to the user
+	//
+	// Logic is abstracted away
 	private static void suggestRead(){
-		Book selected = LibraryLogic.selectUnread(books);	
+		Book selected = LibraryLogic.selectUnread(new ArrayList<Book>(books));	
 		
 		if (selected == null){
 			System.out.println("Congrats! You've read all the books; there are none to suggest.");
