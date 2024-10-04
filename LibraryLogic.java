@@ -8,7 +8,7 @@ import java.util.Collections;
 
 
 public class LibraryLogic {
-	
+/*	
 	// to be changed to Comparator class
 	public static ArrayList<Book> sortByTitle(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>();
@@ -32,7 +32,15 @@ public class LibraryLogic {
 	
 		return sortedBooks;
 	}
-	
+*/
+
+	public static ArrayList<Book> sortByTitle(ArrayList<Book> books){
+		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
+		Collections.sort(sortedBooks, new SortByName());
+		return sortedBooks;
+	}
+
+	/*
 	public static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>();
 	
@@ -57,7 +65,14 @@ public class LibraryLogic {
 		
 		return sortedBooks;
 	}
-	
+*/
+	public static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
+		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
+		Collections.sort(sortedBooks, new SortByAuthor());
+		return sortedBooks;
+	}
+
+	/*
 	public static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>();
 		
@@ -81,6 +96,15 @@ public class LibraryLogic {
 	
 	}
 	
+	*/
+
+	public static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
+		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
+		if (readFlag) Collections.sort(sortedBooks, new SortByRead());
+		else Collections.sort(sortedBooks, new SortByUnread());
+		return sortedBooks;
+
+	}
 	// if all books are read, returns null
 	public static Book selectUnread(ArrayList<Book> books){
 		// to maintain the order of the books
