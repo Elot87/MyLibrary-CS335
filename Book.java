@@ -47,10 +47,17 @@ public class Book {
 	}
 
 	public String toString() {
-		if (rating == -1) {
-			return bookName + ": " author + "\nRating: N/A";
+		if (isRead) {
+			if (rating == -1) {
+				return bookName + "by " + author + "	Rating: N/A		Status: Read";
+			}
+			return bookName + "by " + author + "	Rating: " + Integer.toString(rating);
 		}
-		return bookName + ": " author + "\nRating: " + Integer.toString(rating);
+		if (rating == -1) {
+			return bookName + "by " + author + "	Rating: N/A		Status: Unread";
+		}
+		return bookName + "by " + author + "	Rating: " + Integer.toString(rating) + "	Status: Unread";
+		
 	}
 	
 }
