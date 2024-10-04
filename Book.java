@@ -2,6 +2,8 @@
 // Filename: Book.java
 // Description: Creates the class for the Book objects to be used in MyLibrary.
 
+import java.util.Comparator;
+
 public class Book {
 
 	private String author;
@@ -83,7 +85,7 @@ class SortByRead implements Comparator<Book>{
 	}
 }
 
-class SortByRead implements Comparator<Book>{
+class SortByUnread implements Comparator<Book>{
 	public int compare(Book a, Book b){
 		int n = a.getRead() ? 1:0;
 		int m = b.getRead() ? 1:0;
