@@ -1,7 +1,38 @@
-you should provide a well-organized text file called doc.txt file with a brief explanation of your design choices including
-   - the classes
-   - any interfaces involved
-   - any library classes involved
-   - any data structures you used
-   - any design patterns you used
+Authors: Elliott Cepin (elliottcepin5@arizona.edu) and Aarush Parvataneni (aarushp@arizona.edu)
+Filename: documentation.txt
+Description: Describes the design choices, classes and data structures used to create the MyLibrary program. 
+
+We used 3 classes to create the Library. They are -
+   1) Book: Contains all relevant information and methods pertaining to a single book.
+   2) LibraryLogic: Contains all helper methods related to the commands in our library. We made this class contain only static functions since it is just a bunch of helper 
+   functions to the main command functions from MyLibrary.
+   3) MyLibrary: Contains our main method to access Library and the methods called by the user-interface / user commands. We made this class contain only static functions 
+   since the main function runs of off this class and there can only be one Library per runtime, so there is no need for a way to create a MyLibrary object.
+   4) SortByAuthor & SortByName: These are classes that implement the Comparator interface for our Book so that we can use Collections.sort to sort using Author or Title
+
+Interfaces -
+   We used the Comparator interface to compare the Book objects. As mentioned above, we created two Comparator implementing methods to sort our library using different attributes.
+
+
+We used several library classes such as - 
+   1) Scanner: We used this to read the User commands as well as the file from which we add books.
+   2) File: We used this to create the file object through which a scanner could run and read the information about the books.
+   3) Collections: We used this library to sort and shuffle our ArrayList of books.
+   4) ArrayList: We used this library class to create the data structure that held all the books in our library
+
+
+We used only two different datastructures -
+   1) ArrayList: This datastructure contained all the books in our library and was also the object that was passed onto methods and helper methods as an argument
+   2) String[]: The String array is used in the LibraryLogic method to getBooks and it contains the different options of ways to sort the books in the library.
+
+
+The Design Patterns we used are -
+   1) Decomposition: We used decomposition in the way each function in the MyLibrary class performs a distinct command and within each of these functions, upto 2-3 different helper functions are called from LibraryLogic, each of which perform their own distinct task. 
+   2) Encapsulation: We used many different techniques to ensure encapsulation and safety of our data. Within the MyLibrary class, we made all the methods but Main private
+   since they don't need to be accessed outside of the Main function. We also made the books ArrayList a private variable in MyLibrary to ensure it can't be accessed from 
+   outside. We created a copy of books ArrayList when passing it into functions in the LibraryLogic class to ensure it can't be changed from there even by accident. 
+   in the LibraryLogic class, we made all the functions have a default visibility modifier since we don't want them to be accessed from outside the package. Within the Book
+   class, we set the name, author variable to final to indicate that they cannot be changed. Additionally none of the variables in this class can be accessed without a setter
+   or getter method that has been designed to ensure only appropriate values can be set. 
+
   
