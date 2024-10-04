@@ -1,4 +1,6 @@
-// This just contains the stuff I am supposed to add to MyLibrary.java
+// Authors: Elliott Cepin and Aarush Parvataneni
+// Filename: MyLibrary.java
+// Desciption: User interface for library
 
 import java.util.Scanner;
 import java.util.Collections;
