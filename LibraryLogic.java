@@ -9,11 +9,7 @@ import java.util.Collections;
 
 public class LibraryLogic {
 	
-	// writing a custom soritng algorithm when things like Collections.sort() exist is a fools errand;
-	// however, since I was not in charge of the book class, and didn't realize soon enough that this would be important
-	// the book class does not implement any interfaces. Thusly, I couldn't use Collections.sort()
-	// Luckily, this does allow me to easily scate around the fact that there would have been complications
-	// with there being 4 required ways to sort the lists.
+	// to be changed to Comparator class
 	public static ArrayList<Book> sortByTitle(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>();
 	
