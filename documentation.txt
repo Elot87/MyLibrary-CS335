@@ -1,0 +1,7 @@
+you should provide a well-organized text file called doc.txt file with a brief explanation of your design choices including
+   - the classes
+   - any interfaces involved
+   - any library classes involved
+   - any data structures you used
+   - any design patterns you used
+  
