@@ -4,7 +4,8 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Collections;
-
+import java.io.File;
+import java.io.FileNotFoundException;
 
 
 public class LibraryLogic {
@@ -258,6 +259,21 @@ public class LibraryLogic {
 	// deleted a couple of the selectInt methods since they weren't used anywhere
 	private static int selectInt(Scanner scanner, int a, int b){
 		return selectInt(scanner, "", a, b);
+	}
+
+	// returns null on failure
+	static Scanner getFile(Scanner scanner){
+		File file;
+		try {
+			file = new File(input.nextLine());
+			fromFile = new Scanner(file);
+		} catch (FileNotFoundException e){
+			// would be easy to make this more descriptive.
+			System.out.println("File not found");
+			return null;
+		}
+
+		return fromFile;
 	}
 	
 
