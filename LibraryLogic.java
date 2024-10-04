@@ -22,18 +22,6 @@ public class LibraryLogic {
 			System.out.println("There were no books in your library with the given condition");
 		}
 	}
-
-	static void printHelp() {
-		System.out.println();
-		System.out.println("To add a single book, please enter the command 'addBook'");
-		System.out.println("To add multiple books, please enter the command 'addBooks'");
-		System.out.println("To search for a book, please enter the command 'search'");
-		System.out.println("To update the status of a book you've read, please enter the command 'setToRead'");
-		System.out.println("To rate a book, please enter the command 'rate'");
-		System.out.println("To get a sorted list of all the books in the library, please enter the command 'getBooks'");
-		System.out.println("If you are feeling lucky and want us to suggest an unread book, please enter the command 'suggestRead'");
-		System.out.println("To leave the library, please enter the command 'exit'");
-	}
 	
 	// Author: Aarush
 	static void setRead(ArrayList<Book> books, String title, String author) {
