@@ -121,10 +121,9 @@ public class MyLibrary {
 		if (books.size() == 0) {System.out.println("There are no books in your Library");}
 		String[] options = {"title", "author", "read", "unread"};
 		String selection = LibraryLogic.selectItem(input, "How would you like the books sorted?", options);
-		ArrayList<Book> sorted = LibraryLogic.getSortedBooks(new ArrayList<Book>(books));
-		if (sorted.size() == 0) {
-			return;
-		}
+		ArrayList<Book> sorted = LibraryLogic.getSortedBooks(new ArrayList<Book>(books), selection);
+
+		if (sorted.size() == 0) {return;} 
 		System.out.println("The books, sorted by " + selection + ":");
 		for (int i=0; i<sorted.size(); i++){
 			System.out.println(sorted.get(i).toString());
