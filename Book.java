@@ -62,3 +62,32 @@ public class Book {
 	
 }
 
+
+class SortByAuthor implements Comparator<Book>{
+	public int compare(Book a, Book b){
+		return a.getAuthor().compareTo(b.getAuthor());
+	}
+}
+
+class SortByName implements Comparator<Book>{
+	public int compare(Book a, Book b){
+		return a.getName().compareTo(b.getName());
+	}
+}
+
+class SortByRead implements Comparator<Book>{
+	public int compare(Book a, Book b){
+		int n = a.getRead() ? 1:0;
+		int m = b.getRead() ? 1:0;
+		return n-m;
+	}
+}
+
+class SortByRead implements Comparator<Book>{
+	public int compare(Book a, Book b){
+		int n = a.getRead() ? 1:0;
+		int m = b.getRead() ? 1:0;
+		return m-n;
+	}
+
+}
