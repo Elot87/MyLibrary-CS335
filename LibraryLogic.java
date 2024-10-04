@@ -8,6 +8,50 @@ import java.util.Collections;
 
 
 public class LibraryLogic {
+	// Author: Aarush 
+	static void searchBooks(ArrayList<Book> books, String condition, boolean title) {
+		books = sortByAuthor(books);
+		int empty = 1;
+		for (Book b: books) {
+			if ((title && condition.equals(b.getName())) || (!title && condition.equals(b.getAuthor()))) {
+				System.out.println(b.toString());
+				empty = 0;
+			}
+		}
+		if (empty == 1) {
+			System.out.println("There were no books in your library with the given condition");
+		}
+	}
+	
+	// Author: Aarush
+	static void setRead(ArrayList<Book> books, String title, String author) {
+		int empty = 1;
+		for (Book b: books) {
+			if (title.equals(b.getName()) && author.equals(b.getAuthor())) {
+				b.setRead();
+				empty = 0;
+			}
+		}
+		if (empty == 1) {
+			System.out.print("There were no books in your library with the given title and author");
+		} else {System.out.print("Upgraded!");}
+	}
+	
+	// Author: Aarush
+	static void searchBooksByRating(ArrayList<Book> books, int rating) {
+		books = sortByAuthor(books);
+		int empty = 1; // variable to check if the list is empty
+		for (Book b: books) {
+			if (b.getRating() == rating) {
+				System.out.println(b.toString());
+				empty = 0;
+			}
+		}
+		if (empty == 1) {
+			System.out.print("There were no books in your library with the given condition");
+		}
+	}
+
 /*	
 	// to be changed to Comparator class
 	public static ArrayList<Book> sortByTitle(ArrayList<Book> books){
@@ -96,7 +140,7 @@ public class LibraryLogic {
 	
 	}
 	
-	*/
+	
 
 	public static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
@@ -105,8 +149,29 @@ public class LibraryLogic {
 		return sortedBooks;
 
 	}
+	*/
+	
+	// Put in a couple of output messages to indicate the list is empty. Can change the message if needed
+	static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
+		ArrayList<Book> sortedBooks = new ArrayList<Book>();
+		
+		books = sortByAuthor(books);
+		for (int i = 0; i < books.size(); i++) {
+			if (books.get(i).getRead() == readFlag) {
+				sortedBooks.add(books.get(i));
+			}
+		}
+		if (sortedBooks.size() == 0) {
+			if (readFlag) System.out.println("You haven't read any books in your library.");
+			else System.out.println("You have read every book in the library");
+		}
+		//Collection.sort(sortedBooks); maybe have it by rating
+		return sortedBooks;
+	
+	}
+
 	// if all books are read, returns null
-	public static Book selectUnread(ArrayList<Book> books){
+	static Book selectUnread(ArrayList<Book> books){
 		// to maintain the order of the books
 		ArrayList<Book> shuffledBooks = new ArrayList<Book>(books);
 		Collections.shuffle(shuffledBooks);
@@ -121,7 +186,7 @@ public class LibraryLogic {
 
 	}
 	
-	public static ArrayList<Book> getBooksWithName(String name, ArrayList<Book> books){
+	static ArrayList<Book> getBooksWithName(String name, ArrayList<Book> books){
 		ArrayList<Book> booksWithSelectedName = new ArrayList<Book>();
 		// Checking to see if there are multiple books with that name
 		// *books variable to be replaced with whatever variable we use for the list of all books
@@ -135,39 +200,39 @@ public class LibraryLogic {
 	
 	}
 
-	public static Book selectItem(String query, ArrayList<Book> bookList){
+	// used the Book class toString method to print out the books
+	static Book selectItem(Scanner scanner, String query, ArrayList<Book> bookList){
 		
 		System.out.println(query);		
 		for (int i=0; i<bookList.size(); i++){
-			System.out.println("\t" + (i+1) + ") '" +bookList.get(i).getName() + "', by " +bookList.get(i).getName() + ".");
+			System.out.println(bookList.get(i).toString());
 		}
 		
-		return bookList.get(selectInt(1, bookList.size()) - 1);
+		return bookList.get(selectInt(scanner, 1, bookList.size()) - 1);
 			
 		
 	}
 
-	public static String selectItem(String query, String[] itemList){
+	static String selectItem(Scanner scanner, String query, String[] itemList){
 		
 		System.out.println(query);		
 		for (int i=0; i<itemList.length; i++){
 			System.out.println("\t" + (i+1) + ") " +itemList[i]);
 		}
 		
-		return itemList[selectInt(1, itemList.length)-1];
+		return itemList[selectInt(scanner, 1, itemList.length)-1];
 			
 		
 	}
 
 
 	
-	public static int selectInt(String query, int a, int b){
+	static int selectInt(Scanner scanner, String query, int a, int b){
 		if (!query.equals(""))
 			System.out.println(query);
 		
 		int number = 0;
 		boolean numberSelected = false;
-		Scanner scanner = new Scanner(System.in);
 		String intString = "";
 	
 		while (!numberSelected){
@@ -189,18 +254,12 @@ public class LibraryLogic {
 		return number;
 	
 	}
-	
-	public static int selectInt(String query, int b){
-		return selectInt(query, 0, b);
-	}
-	public static int selectInt(int a, int b){
-		return selectInt("", a, b);
-	}
-	
-	public static int selectInt(int b){
-		return selectInt("", 0, b);
-	}
 
+	// deleted a couple of the selectInt methods since they weren't used anywhere
+	private static int selectInt(Scanner scanner, int a, int b){
+		return selectInt(scanner, "", a, b);
+	}
+	
 
 
 
