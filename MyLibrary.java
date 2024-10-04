@@ -160,42 +160,15 @@ public class MyLibrary {
 		
 		System.out.println(selected.toString());
 	}
-	
-	// Put title first & then author in the constructor method. made the same change in the Book class as well
-	// Scanner changes
-	// Seperating this into logic and interface didn't make sense. 
+
+	// Takes a file name with books formatted bookTitle;bookAuthor.
+	// adds each item to our running list of books
 	private static void addBooks(Scanner input){
-
-		Scanner fromFile;
 		System.out.println("What file are the books in?");
-		File file;
-		try {
-			file = new File(input.nextLine());
-			fromFile = new Scanner(file);
-		} catch (FileNotFoundException e){
-			// would be easy to make this more descriptive.
-			System.out.println("File not found");
-			return;
-		}
+		ArrayList<Book> booksFromFile = getBooksFromFile(input);
+		books.addAll(booksFromFile);
 		
-		String cur;
-		int index;
-		int count = 0;
-		while (fromFile.hasNextLine()){
-			cur = fromFile.nextLine();
-			index = cur.indexOf(';');
-			if (index == -1) continue;
-			// *If possible, I would like to use Aarush's addBook function, if I can get my hands on it; this works for now.
-
-			// whoever decided that *title* should go AFTER author was legitemately crazy.
-			books.add(new Book(cur.substring(0, index), cur.substring(index+1)));
-			count++;
-		}
-		fromFile.close();
-		
-		System.out.println(count + " books added.");
-
-	
+		System.out.println(booksFromFile.size() + " books added.");
 	}
 
 	// prompts user for the desired book, clarifying if there are multiple books with that name, and sets the rating for that book based on the user's request
