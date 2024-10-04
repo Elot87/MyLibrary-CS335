@@ -11,7 +11,7 @@ public class Book {
 	private boolean isRead;
 	private int rating;
 	
-	public Book(String auth, String name) {
+	public Book(String name, String auth) {
 		author = auth;
 		bookName = name;
 		isRead = false;
@@ -49,18 +49,19 @@ public class Book {
 	}
 
 	public String toString() {
-		if (isRead) {
-			if (rating == -1) {
-				return bookName + "by " + author + "	Rating: N/A		Status: Read";
+		if (isRead) { // to decide whether to display read or unread
+			if (rating == -1) { // unrated
+				return bookName + " by " + author + " |	Rating: N/A |	Status: Read";
 			}
-			return bookName + "by " + author + "	Rating: " + Integer.toString(rating);
+			return bookName + " by " + author + " |	Rating: " + Integer.toString(rating) + " |	Status: Read";
 		}
-		if (rating == -1) {
-			return bookName + "by " + author + "	Rating: N/A		Status: Unread";
-		}
-		return bookName + "by " + author + "	Rating: " + Integer.toString(rating) + "	Status: Unread";
 		
-	}
+		if (rating == -1) { // unrated
+			return bookName + " by " + author + " |	Rating: N/A	|	Status: Unread";
+		}
+		return bookName + " by " + author + " |	Rating: " + Integer.toString(rating) + " |	Status: Unread";
+		
+	} 
 	
 }
 
