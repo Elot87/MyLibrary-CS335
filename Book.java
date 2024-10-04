@@ -48,9 +48,9 @@ public class Book {
 
 	public String toString() {
 		if (rating == -1) {
-			return bookName + ": " author + "\nRating: N/A";
+			return bookName + ": " + author + "\nRating: N/A";
 		}
-		return bookName + ": " author + "\nRating: " + Integer.toString(rating);
+		return bookName + ": " + author + "\nRating: " + Integer.toString(rating);
 	}
 	
 }
