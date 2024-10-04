@@ -20,15 +20,7 @@ public class MyLibrary {
 		System.out.println("Welcome to your own personal library!");
 		System.out.println("Currently your library is empty");
 		while (true) {
-			System.out.println();
-			System.out.println("To add a single book, please enter the command 'addBook'");
-			System.out.println("To add multiple books, please enter the command 'addBooks'");
-			System.out.println("To search for a book, please enter the command 'search'");
-			System.out.println("To update the status of a book you've read, please enter the command 'setToRead'");
-			System.out.println("To rate a book, please enter the command 'rate'");
-			System.out.println("To get a sorted list of all the books in the library, please enter the command 'getBooks'");
-			System.out.println("If you are feeling lucky and want us to suggest an unread book, please enter the command 'suggestRead'");
-			System.out.println("To end the program, please enter the command 'exit'");
+			System.out.println("Please enter your command (Enter 'help' for the list of allowed commands)");
 			command = input.nextLine();
 			switch(command) {
 				case "exit":
@@ -55,6 +47,9 @@ public class MyLibrary {
 				case "suggestRead":
 					suggestRead();
 					break;
+				case "help":
+					printHelp();
+					break;
 				default:
 					System.out.println("Please input a valid command.");
 					break;
@@ -63,8 +58,20 @@ public class MyLibrary {
 
 	}
 
+	private static void printHelp() {
+		System.out.println();
+		System.out.println("To add a single book, please enter the command 'addBook'");
+		System.out.println("To add multiple books, please enter the command 'addBooks'");
+		System.out.println("To search for a book, please enter the command 'search'");
+		System.out.println("To update the status of a book you've read, please enter the command 'setToRead'");
+		System.out.println("To rate a book, please enter the command 'rate'");
+		System.out.println("To get a sorted list of all the books in the library, please enter the command 'getBooks'");
+		System.out.println("If you are feeling lucky and want us to suggest an unread book, please enter the command 'suggestRead'");
+		System.out.println("To leave the library, please enter the command 'exit'");
+	}
+
 	// Author: Aarush
-	public static void search(Scanner input) {
+	private static void search(Scanner input) {
 		String method;
 		while (true) {
 			System.out.print("Method of Searching(Please type TITLE , AUTHOR or RATING):");
@@ -87,7 +94,7 @@ public class MyLibrary {
 	}
 	
 	// Author: Aarush
-	public static void addBook(Scanner input) {
+	private static void addBook(Scanner input) {
 		System.out.println("Please enter book title:");
 		String title = input.nextLine();
 		System.out.println("Please enter book author:");
@@ -100,7 +107,7 @@ public class MyLibrary {
 	// Author: Aarush
 	// I required the user to input both title and author to set the book as read
 	// if more than one copy of the same book exist in the library, both get set to read 
-	public static void setToRead(Scanner input) {
+	private static void setToRead(Scanner input) {
 		System.out.println("Please enter book title:");
 		String title = input.nextLine();
 		System.out.println("Please enter book author:");
@@ -110,7 +117,7 @@ public class MyLibrary {
 	
 	// added default case
 	// 
-	public static void getBooks(Scanner input){	
+	private static void getBooks(Scanner input){	
 		if (books.size() == 0) {System.out.println("There are no books in your Library");}
 		String[] options = {"title", "author", "read", "unread"};
 		String selection = LibraryLogic.selectItem(input, "How would you like the books sorted?", options);
@@ -143,7 +150,7 @@ public class MyLibrary {
 		}	
 	}
 	
-	public static void suggestRead(){
+	private static void suggestRead(){
 		Book selected = LibraryLogic.selectUnread(books);	
 		
 		if (selected == null){
@@ -157,7 +164,7 @@ public class MyLibrary {
 	// Put title first & then author in the constructor method. made the same change in the Book class as well
 	// Scanner changes
 	// Seperating this into logic and interface didn't make sense. 
-	public static void addBooks(Scanner input){
+	private static void addBooks(Scanner input){
 
 		Scanner fromFile;
 		System.out.println("What file are the books in?");
@@ -191,7 +198,7 @@ public class MyLibrary {
 	
 	}
 	
-	public static void rate(Scanner scanner){
+	private static void rate(Scanner scanner){
 
 		Book bookToRate;	
 	
