@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 
 public class LibraryLogic {
 	// Author: Aarush 
+	// @pre books != null
 	static void searchBooks(ArrayList<Book> books, String condition, boolean title) {
 		books = sortByAuthor(books);
 		int empty = 1;
@@ -25,6 +26,7 @@ public class LibraryLogic {
 	}
 	
 	// Author: Aarush
+	// @pre books != null
 	static void setRead(ArrayList<Book> books, String title, String author) {
 		int empty = 1;
 		for (Book b: books) {
@@ -39,6 +41,7 @@ public class LibraryLogic {
 	}
 	
 	// Author: Aarush
+	// @pre books != null
 	static void searchBooksByRating(ArrayList<Book> books, int rating) {
 		books = sortByAuthor(books);
 		int empty = 1; // variable to check if the list is empty
@@ -53,12 +56,13 @@ public class LibraryLogic {
 		}
 	}
 
+	// @pre books != null
 	static ArrayList<Book> sortByTitle(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
 		Collections.sort(sortedBooks, new SortByName());
 		return sortedBooks;
 	}
-
+	// @pre books != null
 	static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
 		ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
 		Collections.sort(sortedBooks, new SortByAuthor());
@@ -85,6 +89,7 @@ public class LibraryLogic {
 	}
 
 	// if all books are read, returns null
+	// @pre books != null
 	static Book selectUnread(ArrayList<Book> books){
 		// to maintain the order of the books
 		ArrayList<Book> shuffledBooks = new ArrayList<Book>(books);
@@ -99,7 +104,8 @@ public class LibraryLogic {
 		return selected;
 
 	}
-	
+
+	// @pre books != null
 	static ArrayList<Book> getBooksWithName(String name, ArrayList<Book> books){
 		ArrayList<Book> booksWithSelectedName = new ArrayList<Book>();
 		// Checking to see if there are multiple books with that name
@@ -126,7 +132,7 @@ public class LibraryLogic {
 			
 		
 	}
-
+	
 	static String selectItem(Scanner scanner, String query, String[] itemList){
 		
 		System.out.println(query);		
@@ -207,7 +213,7 @@ public class LibraryLogic {
 		return books;
 	}
 
-	// @pre {"title", "author", "read", "unread"}.contains(sortingMethod)
+	// @pre {"title", "author", "read", "unread"}.contains(sortingMethod) && books != null
 	public static ArrayList<Book> getSortedBooks(ArrayList<Book> books, String sortingMethod){
 		ArrayList<Book> sorted = new ArrayList<Book>();
 		switch(sortingMethod){
