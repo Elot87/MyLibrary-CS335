@@ -18,13 +18,9 @@ public class Book {
 		rating = -1;
 	}
 	
-	// rating has to be between 1-5
+	// @pre rating < 6 && rating > 0
 	public void setRating(int rate) {
-		if (rate < 6 && rate > 0) {
-			rating = rate;
-		} else {
-			throw new IllegalArgumentException();
-		}
+		rating = rate;
 	}
 	
 	// rating being -1 indicates that the rating hasn't been set yet
