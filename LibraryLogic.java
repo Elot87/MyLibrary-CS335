@@ -199,7 +199,10 @@ public class LibraryLogic {
 		String input = scanner.nextLine();
 		Scanner fromFile = getFile(input);
 		ArrayList<Book> books = new ArrayList<Book>();
-		
+		if (fromFile == null) {
+			System.out.println("File doesn't exist. Please input valid filename");
+			return getBooksFromFile(scanner);
+		}
 		String cur;
 		int index;
 		while (fromFile.hasNextLine()){
