@@ -166,8 +166,6 @@ public class LibraryLogic {
   // @params - String input: used to get user inputed file name
   // @pre - scanner must not be null
   public static ArrayList<Book> getBooksFromFile(String input){
-    
-    	String input = scanner.nextLine();
 	Scanner fromFile = getFile(input);
 	ArrayList<Book> books = new ArrayList<Book>();
 	if (fromFile == null) {
