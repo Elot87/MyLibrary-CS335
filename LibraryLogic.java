@@ -15,21 +15,25 @@ public class LibraryLogic {
   //           String condition: the title or author we want to search book by
   //			 boolean title: true for if we want to search by title, false for if we want to search by author
   // @pre books must not be null
-  static void searchBooks(ArrayList<Book> books, String condition, boolean title) {
+  static String searchBooks(ArrayList<Book> books, String condition, boolean title) {
     int empty = 1; // variable to indicate whether or nor this condition yielded results
+    StringBuilder sb = new StringBuilder();
     for (Book b: books) {
       // if statement basically checks for whether we are searching by title or by author
       // and then checks if the title or author match based on that. First part of the if statement
       // is for when we are searching by Title and second part for Author
       if ((title && condition.equals(b.getName())) || (!title && condition.equals(b.getAuthor()))) {
-        System.out.println(b.toString());
+        sb.append(b.toString());
+        sb.append("\n");
         empty = 0;
       }
     }
     // if condition didn't yield results let the user know
     if (empty == 1) {
-      System.out.println("There were no books in your library with the given condition");
+    	sb.append("There were no books in your library with the given condition");
     }
+    
+    return sb.toString();
   }
 
   // This method sets the Book with the matching title and author in the Library to read
@@ -37,18 +41,14 @@ public class LibraryLogic {
   //           String title: title of book we want to read
   //			 String author: author of book we want to read
   // @pre books must not be null
-  static void setRead(ArrayList<Book> books, String title, String author) {
-    int empty = 1; // variable to indicate whether or nor this condition yielded results
+  static String setRead(ArrayList<Book> books, String title, String author) {
     for (Book b: books) {
       if (title.equals(b.getName()) && author.equals(b.getAuthor())) {
         b.setRead();
-        empty = 0;
+        return ("Updated!");
       }
     }
-    // if condition didn't yield results let the user know
-    if (empty == 1) {
-      System.out.println("There were no books in your library with the given title and author");
-    } else {System.out.println("Updated!");}
+    return ("There were no books in your library with the given title and author");
   }
 
   // This method earches for all the books that match the given rating and prints them out for the
@@ -56,17 +56,19 @@ public class LibraryLogic {
   // @params - ArrayList books: datastructure that contains all the books in the library
   //           int rating: rating of books we want to retrieve
   // @pre : books must not be null
-  static void searchBooksByRating(ArrayList<Book> books, int rating) {
+  static String searchBooksByRating(ArrayList<Book> books, int rating) {
     int empty = 1; // variable to check if the list is empty
+    StringBuilder sb = new StringBuilder();
     for (Book b: books) {
       if (b.getRating() == rating) {
-        System.out.println(b.toString());
+        sb.append(b.toString());
         empty = 0;
       }
     }
     if (empty == 1) {
-      System.out.print("There were no books in your library with the given condition");
+      sb.append("There were no books in your library with the given condition");
     }
+    return sb.toString();
   }
 
   // puts books in order by title
@@ -128,50 +130,24 @@ public class LibraryLogic {
   // @params - ArrayList books: datastructure that contains all the books in the library
   //           String name: we will select all books with this name
   // @pre books & name must not be null
-  static ArrayList<Book> getBooksWithName(String name, ArrayList<Book> books){
-    ArrayList<Book> booksWithSelectedName = new ArrayList<Book>();
+  static Book getBooksWithName(String name, String author, ArrayList<Book> books){
     // Checking to see if there are multiple books with that name
     // *books variable to be replaced with whatever variable we use for the list of all books
     for (Book cur : books){
-      if (cur.getName().equals(name)){
-        booksWithSelectedName.add(cur);
+      if (cur.getName().equals(name) && cur.getAuthor().equals(author)){
+        return cur;
       }
     }
 
-    return booksWithSelectedName;
+    return null;
 
-  }
-
-  
-
-  // user interface function for selecting a particular string from a set of options
-  // @params - String input: the name of the file we will retrieve text from
-  // @pre input must not be null
-  public static Scanner getFile(String input){
-    File file;
-    Scanner fromFile;
-    try {
-      file = new File(input);
-      fromFile = new Scanner(file);
-    } catch (FileNotFoundException e){
-      // would be easy to make this more descriptive.
-      System.out.println("File not found");
-      return null;
-    }
-
-    return fromFile;
   }
 
   // used to get all the books from a file formatted title;author
   // @params - String input: used to get user inputed file name
   // @pre - scanner must not be null
-  public static ArrayList<Book> getBooksFromFile(String input){
-	Scanner fromFile = getFile(input);
+  static ArrayList<Book> getBooksFromFile(Scanner fromFile){
 	ArrayList<Book> books = new ArrayList<Book>();
-	if (fromFile == null) {
-		System.out.println("File doesn't exist. Please input valid filename");
-		return getBooksFromFile(scanner);
-	}
 	String cur;
 	int index;
 	while (fromFile.hasNextLine()){
@@ -181,7 +157,6 @@ public class LibraryLogic {
 		books.add(new Book(cur.substring(0, index), cur.substring(index+1)));
 	}
 	fromFile.close();
-	
 	return books;
   }
 
@@ -189,7 +164,7 @@ public class LibraryLogic {
   // @param - ArrayList books: data structure containing all books in the library
   //          String sortingMethod: user selected sorting method, sorted by title, author or read status 
   // @pre {"title", "author", "read", "unread"}.contains(sortingMethod)
-  public static ArrayList<Book> getSortedBooks(ArrayList<Book> books, String sortingMethod){
+  static ArrayList<Book> getSortedBooks(ArrayList<Book> books, String sortingMethod){
     ArrayList<Book> sorted = new ArrayList<Book>();
     switch(sortingMethod){
       case "title":
