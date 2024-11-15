@@ -3,6 +3,8 @@
 // Description: User interface for library
 
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MyLibrary {
@@ -12,7 +14,8 @@ public class MyLibrary {
   // This is the main method that runs the program
   public static void main(String args[]) {
     Scanner input = new Scanner(System.in);
-    String command;
+    String command, title, author;
+    String output;
     System.out.println("Welcome to your own personal library!");
     System.out.println("Currently your library is empty");
     while (true) {
@@ -23,25 +26,36 @@ public class MyLibrary {
           input.close();
           return;
         case "addBook":
-          addBook(input);
+          System.out.print("Title:");
+          title = input.nextLine();
+          System.out.print("Author:");
+          author = input.nextLine();
+          output = addBook(title, author);
+          System.out.println(output);
           break;
         case "addBooks":
-          addBooks(input);
+          output = addBooks(input);
+          System.out.println(output);
           break;
         case "search":
-          search(input);
+          output = search(input);
+          System.out.println(output);          
           break;
         case "setToRead":
-          setToRead(input);
+          output = setToRead(input);
+          System.out.println(output);
           break;
         case "rate":
-          rate(input);
+          output = rate(input);
+          System.out.println(output);
           break;
         case "getBooks":
-          getBooks(input);
+          output = getBooks(input);
+          System.out.println(output);
           break;
         case "suggestRead":
-          suggestRead();
+          output = suggestRead();
+          System.out.println(output);
           break;
         case "help":
           printHelp();
@@ -74,7 +88,7 @@ public class MyLibrary {
   // and then asks for the appropriate information and retrieves all books that
   // match the condition.
   // @params - Scanner input: the user input stream
-  private static void search(Scanner input) {
+  private static String search(Scanner input) {
     String method;
     while (true) {
       System.out.print("Method of Searching(Please type TITLE , AUTHOR or RATING):");
@@ -82,17 +96,14 @@ public class MyLibrary {
       // if valid input is given, the loop will return after searching for the books
       if (method.equals("TITLE")) {
         // true argument here infers we search by title
-        LibraryLogic.searchBooks(new ArrayList<Book>(books), input.nextLine(), true);
-        return;
+        return LibraryLogic.searchBooks(new ArrayList<Book>(books), input.nextLine(), true);
       } else if (method.equals("AUTHOR")) {
         // false argument here infers we search by author
-        LibraryLogic.searchBooks(new ArrayList<Book>(books), input.nextLine(), false);
-        return;
+        return LibraryLogic.searchBooks(new ArrayList<Book>(books), input.nextLine(), false);
       } else if (method.equals("RATING")) {
         // select the rating the user wants to see and then search
         int rating = selectInt(input, "What rating would you like to select? (integer 1-5)", 1, 5);
-        LibraryLogic.searchBooksByRating(new ArrayList<Book>(books), rating);
-        return;
+        return LibraryLogic.searchBooksByRating(new ArrayList<Book>(books), rating);
       }
       // this is only printed out if a non-valid input is given
       System.out.println("Please input valid method");
@@ -102,14 +113,15 @@ public class MyLibrary {
   // This method asks the user for the books title and author and adds it to the
   // library
   // @params - Scanner input: the user input stream
-  private static void addBook(Scanner input) {
-    System.out.println("Please enter book title:");
-    String title = input.nextLine();
-    System.out.println("Please enter book author:");
-    String author = input.nextLine();
+  private static String addBook(String title, String author) {
     Book newBook = new Book(title, author);
+    for (Book b : books) {
+    	if (title.equals(b.getName()) && author.equals(b.getAuthor())) {
+    		return "Book already exists in library!";
+    	}
+    }
     books.add(newBook);
-    System.out.println("Book Added!");
+    return ("Book Added!");
   }
 
   // This method requires the user to input both title and author to set the book
@@ -117,56 +129,63 @@ public class MyLibrary {
   // if more than one copy of the same book exist in the library, both get set to
   // read
   // @params - Scanner input: the user input stream
-  private static void setToRead(Scanner input) {
+  private static String setToRead(Scanner input) {
     System.out.println("Please enter book title:");
     String title = input.nextLine();
     System.out.println("Please enter book author:");
     String author = input.nextLine();
-    LibraryLogic.setRead(books, title, author);
+    return LibraryLogic.setRead(books, title, author);
   }
 
-  private static void getBooks(Scanner input) {
+  private static String getBooks(Scanner input) {
+	StringBuilder sb = new StringBuilder();
     if (books.size() == 0) {
-      System.out.println("There are no books in your Library");
+      return ("There are no books in your Library");
     }
     String[] options = { "title", "author", "read", "unread" };
     String selection = selectItem(input, "How would you like the books sorted?", options);
     ArrayList<Book> sorted = LibraryLogic.getSortedBooks(new ArrayList<Book>(books), selection);
-
-    if (sorted.size() == 0) {
-      return;
-    }
-    System.out.println("The books, sorted by " + selection + ":");
+    sb.append("The books, sorted by " + selection + ":\n");
     for (int i = 0; i < sorted.size(); i++) {
-      System.out.println(sorted.get(i).toString());
+      sb.append(sorted.get(i).toString() + "\n");
     }
+    return sb.toString();
   }
 
   // Picks a random unread book and presents it to the user
   //
   // Logic is abstracted away
-  private static void suggestRead() {
+  private static String suggestRead() {
     Book selected = LibraryLogic.selectUnread(new ArrayList<Book>(books));
 
     if (selected == null) {
-      System.out.println("Congrats! You've read all the books; there are none to suggest.");
-      return;
+      return ("Congrats! You've read all the books; there are none to suggest.");
     }
 
-    System.out.println(selected.toString());
+    return (selected.toString());
   }
 
   // Takes a file name with books formatted bookTitle;bookAuthor.
   // adds each item to our running list of books
   // @params - Scanner input: the user input stream
   // @pre - scanner is not null
-  private static void addBooks(Scanner input) {
+  private static String addBooks(Scanner input) {
     System.out.println("What file are the books in?");
-    String file = input.nextLine();
-    ArrayList<Book> booksFromFile = LibraryLogic.getBooksFromFile(file);
+    String filename = input.nextLine();
+    File file;
+    Scanner fromFile;
+    try {
+      file = new File(filename);
+      fromFile = new Scanner(file);
+    } catch (FileNotFoundException e){
+      // would be easy to make this more descriptive.
+      System.out.println("File not found");
+      System.out.println("Please input valid filename");
+      return addBooks(input);
+    }
+    ArrayList<Book> booksFromFile = LibraryLogic.getBooksFromFile(fromFile);
     books.addAll(booksFromFile);
-
-    System.out.println(booksFromFile.size() + " books added.");
+    return (booksFromFile.size() + " books added.");
   }
 
   // prompts user for the desired book, clarifying if there are multiple books
@@ -177,33 +196,25 @@ public class MyLibrary {
   // abstracted into the LibraryLogic class
   // @params - Scanner input: the user input stream
   // @pre scanner is not null
-  private static void rate(Scanner scanner) {
+  private static String rate(Scanner scanner) {
     Book bookToRate;
-
+    StringBuilder sb = new StringBuilder();
     System.out.println("What book would you like to rate?");
     String chosenBook = scanner.nextLine();
-
-    ArrayList<Book> booksWithSelectedName = LibraryLogic.getBooksWithName(chosenBook, books);
+    System.out.println("Who is the author of the book?");
+    String chosenAuthor = scanner.nextLine();
+    Book book = LibraryLogic.getBooksWithName(chosenBook,chosenAuthor, books);
 
     // If no book with that name exist
-    if (booksWithSelectedName.size() == 0) {
-      System.out.println("\"" + chosenBook + "\" does not appear to exist.");
-      System.out.println("If you would like to add it, use the addBook command");
-      return;
-
-      // If many books with that name exist
-    } else if (booksWithSelectedName.size() > 1) {
-      System.out.println("It looks like there are multiple books with that title.");
-      bookToRate = selectItem(scanner, "Please select a book by entering the corresponding number.",
-          booksWithSelectedName);
-
-      // if exactly one book with that name exists
-    } else {
-      bookToRate = booksWithSelectedName.get(0);
+    if (book == null) {
+      sb.append("\"" + chosenBook + "\" by " + chosenAuthor + "does not appear to exist.\n");
+      sb.append("If you would like to add it, use the addBook command");
+      return sb.toString();
     }
 
     int rating = selectInt(scanner, "What would you like to rate the book? (integer 1-5)", 1, 5);
-    bookToRate.setRating(rating);
+    book.setRating(rating);
+    return "Rating updated!";
   }
 
   // interface function for user selection of a book from a list of books
@@ -211,7 +222,7 @@ public class MyLibrary {
   //           String query: string that will be displayed to the user
   //           Scanner scanner: user input scanner
   // @pre parameters should not be null
-  static Book selectItem(Scanner scanner, String query, ArrayList<Book> bookList){
+  private static Book selectItem(Scanner scanner, String query, ArrayList<Book> bookList){
 
     System.out.println(query);		
     for (int i=0; i<bookList.size(); i++){
@@ -228,7 +239,7 @@ public class MyLibrary {
   //           String query: string that will be displayed to the user
   //           Scanner scanner: user input scanner
   // @pre parameters should not be null
-  static String selectItem(Scanner scanner, String query, String[] itemList){
+  private static String selectItem(Scanner scanner, String query, String[] itemList){
 
     System.out.println(query);		
     for (int i=0; i<itemList.length; i++){
