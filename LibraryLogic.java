@@ -9,7 +9,10 @@ import java.io.FileNotFoundException;
 
 
 public class LibraryLogic {
-	
+
+	// this method adds the books from filename to the arraylist books
+	// and returns a string indicating the number of books that were added.
+	// if the file doesn't exist or can't be read, it returns null and prints out the error msg
 	static String addBooks(ArrayList<Book> books, String filename) {
 		File file;
 	    Scanner fromFile;
@@ -26,7 +29,9 @@ public class LibraryLogic {
 	    books.addAll(booksFromFile);
 	    return (booksFromFile.size() + " books added.");
 	}
-	
+
+	// This method adds the book with title and author to the arraylist books.
+	// if the book already exists in the library, we don't add it and indicate so
 	static String addBook(ArrayList<Book> books, String title, String author) {
 	    Book newBook = new Book(title, author);
 	    for (Book b : books) {
