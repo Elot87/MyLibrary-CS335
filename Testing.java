@@ -135,7 +135,7 @@ public class Testing {
 	}
 	
 	@Test
-	public void searchBooksByRating() {
+	public void getBooksWithNameTest() {
 		String author = "C.S. Lewis";
 		String title = "Letters to Malcom";
 		String fakeTitle = "A Guide to Prospecting";
@@ -144,15 +144,27 @@ public class Testing {
 		ArrayList<Book> bookList = new ArrayList<Book>();
 		
 		LibraryLogic.addBook(bookList, title, author);
-		LibraryLogic.addBook(bookList, fakeTitle, fakeAuthor);
+
 		
-		bookList.get(1).setRating(4);
-		
-		assertEquals("There were no books in your library with the given rating", LibraryLogic.searchBooksByRating(bookList, 5));
-		assertEquals(bookList.get(1).toString() + "\n", LibraryLogic.searchBooksByRating(bookList, 4));
+		assertEquals(null, LibraryLogic.getBooksWithName(fakeTitle, fakeAuthor, bookList));
+		assertEquals(title, LibraryLogic.getBooksWithName(title, author, bookList).getName());
 		
 		
 	}
+	
+	@Test
+	public void bookTest() {
+		String author = "C.S. Lewis";
+		String title = "Letters to Malcom";
+		Book book = new Book(title, author);
+		String toStr = book.toString();
+		assertEquals(-1, book.getRating());
+		book.setRead();
+		toStr = book.toString();
+		book.setRating(1);
+		toStr = book.toString();
+	}
+	
 	
 	
 	
