@@ -3,8 +3,6 @@
 // Description: User interface for library
 
 import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MyLibrary {
@@ -114,14 +112,7 @@ public class MyLibrary {
   // library
   // @params - Scanner input: the user input stream
   private static String addBook(String title, String author) {
-    Book newBook = new Book(title, author);
-    for (Book b : books) {
-    	if (title.equals(b.getName()) && author.equals(b.getAuthor())) {
-    		return "Book already exists in library!";
-    	}
-    }
-    books.add(newBook);
-    return ("Book Added!");
+    return (LibraryLogic.addBook(books, title, author));
   }
 
   // This method requires the user to input both title and author to set the book
@@ -172,20 +163,9 @@ public class MyLibrary {
   private static String addBooks(Scanner input) {
     System.out.println("What file are the books in?");
     String filename = input.nextLine();
-    File file;
-    Scanner fromFile;
-    try {
-      file = new File(filename);
-      fromFile = new Scanner(file);
-    } catch (FileNotFoundException e){
-      // would be easy to make this more descriptive.
-      System.out.println("File not found");
-      System.out.println("Please input valid filename");
-      return addBooks(input);
-    }
-    ArrayList<Book> booksFromFile = LibraryLogic.getBooksFromFile(fromFile);
-    books.addAll(booksFromFile);
-    return (booksFromFile.size() + " books added.");
+    String result = LibraryLogic.addBooks(books, filename);
+    if (result == null) {return addBooks(input);}
+    return result;
   }
 
   // prompts user for the desired book, clarifying if there are multiple books
