@@ -9,6 +9,36 @@ import java.io.FileNotFoundException;
 
 
 public class LibraryLogic {
+	
+	static String addBooks(ArrayList<Book> books, String filename) {
+		File file;
+	    Scanner fromFile;
+	    try {
+	      file = new File(filename);
+	      fromFile = new Scanner(file);
+	    } catch (FileNotFoundException e){
+	      // would be easy to make this more descriptive.
+	      System.out.println("File not found");
+	      System.out.println("Please input valid filename");
+	      return null;
+	    }
+	    ArrayList<Book> booksFromFile = LibraryLogic.getBooksFromFile(fromFile);
+	    books.addAll(booksFromFile);
+	    return (booksFromFile.size() + " books added.");
+	}
+	
+	static String addBook(ArrayList<Book> books, String title, String author) {
+	    Book newBook = new Book(title, author);
+	    for (Book b : books) {
+	    	if (title.equals(b.getName()) && author.equals(b.getAuthor())) {
+	    		return "Book already exists in library!";
+	    	}
+	    }
+	    books.add(newBook);
+	    return ("Book Added!");
+	  }
+  
+  
   // This method searches for all the books that match the given condition and prints them out for the
   // user to view.
   // @params - ArrayList books: datastructure that contains all the books in the library
@@ -61,12 +91,12 @@ public class LibraryLogic {
     StringBuilder sb = new StringBuilder();
     for (Book b: books) {
       if (b.getRating() == rating) {
-        sb.append(b.toString());
+        sb.append(b.toString() + "\n");
         empty = 0;
       }
     }
     if (empty == 1) {
-      sb.append("There were no books in your library with the given condition");
+      sb.append("There were no books in your library with the given rating");
     }
     return sb.toString();
   }
@@ -74,7 +104,7 @@ public class LibraryLogic {
   // puts books in order by title
   // @params - ArrayList<Book> books: hold all books in library
   // @pre - books != null
-  static ArrayList<Book> sortByTitle(ArrayList<Book> books){
+  private static ArrayList<Book> sortByTitle(ArrayList<Book> books){
     ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
     Collections.sort(sortedBooks, new SortByName());
     return sortedBooks;
@@ -83,7 +113,7 @@ public class LibraryLogic {
   // puts books in order by authoer
   // @params - ArrayList<Book> books: hold all books in library
   // @pre - books != null
-  static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
+  private static ArrayList<Book> sortByAuthor(ArrayList<Book> books){
     ArrayList<Book> sortedBooks = new ArrayList<Book>(books);
     Collections.sort(sortedBooks, new SortByAuthor());
     return sortedBooks;
@@ -92,7 +122,7 @@ public class LibraryLogic {
   // puts all read or unread (depending on the flag) books into a file
   // @params - ArrayList<Books> books: all books in library
   // @pre - params != null
-  static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
+  private static ArrayList<Book> sortByRead(ArrayList<Book> books, boolean readFlag){
     ArrayList<Book> sortedBooks = new ArrayList<Book>();
 
     books = sortByAuthor(books);
