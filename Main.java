@@ -1,166 +1,216 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
-    static private String message;
-    private static void createAndShowGUI() {
-        JFrame f=new JFrame("My Library");
-        JPanel p = new JPanel();
-        ArrayList<String> commands = new ArrayList<String>();
-        commands.add("help");
-        commands.add("add book");
-        commands.add("add books");
-        commands.add("do thing");
-        commands.add("do thing");
-        commands.add("do thing");
-        commands.add("do thing");
-        commands.add("do thing");
+    private static HashMap<String, JPanel> panels = new HashMap<String, JPanel>();
+    private static JFrame f=new JFrame("My Library");
+    private static ArrayList<Book> books = new ArrayList<Book>();
+    
+    private static void createMainPanel() {
+    	 JPanel p = new JPanel();
+    	 p.setLayout(null);
+         ArrayList<String> commands = new ArrayList<String>();
+         //commands.add("help");
+         commands.add("addBook");
+         commands.add("addBooks");
+         commands.add("search");
+         commands.add("getBooks");
+         commands.add("suggestRead");
+         commands.add("setToRead");
+         commands.add("rate");
 
-        ArrayList<JButton> buttons = new ArrayList<JButton>();
-        int index = 0;
-        for (String s : commands){
-            buttons.add(new JButton(s));
-            buttons.get(index).setBounds(100 * (index % 4), 100  + (35 * (1 + (index / 4))), 95, 30);
-            p.add(buttons.get(index));  
-            p.setSize(400,400);  
-            
-            p.setVisible(true);   
-            index++;
-            f.setVisible(true);
-
-            
-        }
-        f.setLayout(null);
-        f.add(p);
-        f.setSize(400,400);  
-        f.setVisible(true);
-
-
-        JPanel input = new JPanel();
-        
-        JTextField getText = new JTextField(48);
-        input.add(getText);
-        p.setVisible(false);
-        f.add(input);
-        input.setVisible(false);
-        input.setBounds(0,300,400,30);
-
-        // add Book
+         p.setSize(400,400);  
+         
+         ArrayList<JButton> buttons = new ArrayList<JButton>();
+         int index = 0;
+         for (String s : commands){
+             buttons.add(new JButton(s));
+             buttons.get(index).setBounds(100 * (index % 4), 100  + (35 * (1 + (index / 4))), 95, 30);
+             buttons.get(index).addActionListener(click -> {
+            	changePanel(panels.get(s)); 
+             });
+             p.add(buttons.get(index));  
+             index++;                     
+         }
+         panels.put("main", p);
+    }
+    
+    private static void createAddBookPanel() {
+    	// add Book
         JPanel addBook = new JPanel();
-        JTextField title = new JTextField("Title");
-        JTextField author = new JTextField("Author");
+        addBook.setLayout(null);
+        JTextField title = new JTextField("Title", 25);
+        JTextField author = new JTextField("Author", 25);
         JButton submit = new JButton("Submit");
-        f.add(addBook);
         title.setBounds(0, 0, 400, 30);
         
         addBook.add(title);
-        addBook.setVisible(false);
         addBook.setBounds(0,0,400,400);
         author.setBounds(0,45,400,30);
         addBook.add(author);
         submit.setBounds(250, 90, 100, 30);
         addBook.add(submit);
+        addBook.add(createMainPgButton());
         
+        JLabel results = new JLabel("");
+        JScrollPane scp = new JScrollPane(results);
+        scp.setBounds(10, 150, 380, 200);
+        addBook.add(scp);
+        panels.put("addBook", addBook);
         
+        submit.addActionListener(click -> {
+            String retStr = LibraryLogic.addBook(books, title.getText(), author.getText());
+            results.setText(retStr);
+        });
         
-        // add Books
+    }
+    
+    private static void createAddBooksPanel() {
+    	// add Books
         JPanel addBooks = new JPanel();
-        JTextField title2 = new JTextField("filename");
-        JButton submit2 = new JButton("Submit");
-        f.add(addBooks);
-        title2.setBounds(0, 0, 400, 30);
+        addBooks.setLayout(null);
+        JTextField title = new JTextField("filename", 25);
+        JButton submit = new JButton("Submit");
+        title.setBounds(0, 0, 400, 30);
 
-        addBooks.add(title2);
-        addBooks.setVisible(false);
+        addBooks.add(title);
         addBooks.setBounds(0,0,400,400);
-        submit2.setBounds(250, 90, 100, 30);
-        addBooks.add(submit2);
+        submit.setBounds(250, 90, 100, 30);
+        addBooks.add(submit);
+        addBooks.add(createMainPgButton());
         
-        // search
+        JTextArea results = new JTextArea("");
+        results.setEditable(false);
+        JScrollPane scp = new JScrollPane(results);
+        scp.setBounds(10, 150, 380, 200);
+        addBooks.add(scp);
+        
+        submit.addActionListener(click -> {
+            String retStr = LibraryLogic.addBooks(books, title.getText());
+            if (retStr == null) {results.setText("File not found\nPlease input valid filename");}
+            else {results.setText(retStr);}
+        });
+        panels.put("addBooks", addBooks);
+    }
+    
+    private static void createSearchPanel() {
+    	// search
         JPanel search = new JPanel();
-        JTextField search_title = new JTextField("Query");
-        JButton author_button = new JButton("Author");
-        JButton rating_button = new JButton("Rating");
-        JButton title_button = new JButton("Title");
-
-        f.add(search);
         search.setLayout(null);
+        JTextField search_title = new JTextField("Title/Author/Rating(1-5)", 25);
+        JButton submit = new JButton("Submit");
+        submit.setBounds(280, 100, 100, 30);
+        search.add(submit);
+        String[] choices = {"Title", "Author", "Rating"};
+        JComboBox<String> searchChoice = new JComboBox<>(choices);
+        JLabel searchBy = new JLabel("Search by:");
+        searchBy.setBounds(75, 100, 75, 50);
+        search_title.setBounds(75, 40, 175, 40);
         search.setBounds(0,0,400,400);
-        author_button.setBounds(20, 50, 100, 40);
-        rating_button.setBounds(150, 50, 100, 40);
-        title_button.setBounds(280, 50, 100, 40);
-        search_title.setBounds(0,0,400,30);
-        search.add(author_button);
-        search.add(rating_button);
-        search.add(title_button);
+        searchChoice.setBounds(150, 100, 100, 40);
+        search.add(searchChoice);
         search.add(search_title);
+        search.add(searchBy);
+        search.add(createMainPgButton());
         
-        search.setVisible(false);
+        JTextArea results = new JTextArea("");
+        results.setEditable(false);
+        JScrollPane scp = new JScrollPane(results);
+        scp.setBounds(10, 150, 380, 200);
+        search.add(scp);
         
+        submit.addActionListener(click -> {
+        	String retStr;
+        	if (searchChoice.getSelectedItem().equals("Title")) {
+                retStr = LibraryLogic.searchBooks(books, search_title.getText(), true);
+        	} else if (searchChoice.getSelectedItem().equals("Author")) {
+                retStr = LibraryLogic.searchBooks(books, search_title.getText(), false);
+        	} else {
+        		if (search_title.getText().length() == 1 && search_title.getText().charAt(0) > '0' && search_title.getText().charAt(0) < '6') {
+                    retStr = LibraryLogic.searchBooksByRating(books, Integer.parseInt(search_title.getText()));
+        		} else {
+        			retStr = "Please provide a rating between 1-5";
+        		}
+        	}
+            results.setText(retStr);
+        });
         
-        
-        
-        
-        
-        // setToRead
+        panels.put("search", search);
+    }
+    
+    private static void createReadPanel() {
+    	// setToRead
         JPanel setToRead = new JPanel();
-        JTextField setToRead_title = new JTextField("Title");
-        JTextField setToRead_author = new JTextField("Author");
-        JButton setToRead_submit = new JButton("Submit");
-        f.add(setToRead);
-        setToRead_title.setBounds(0, 0, 400, 30);
+        setToRead.setLayout(null);
+        JTextField title = new JTextField("Title", 25);
+        JTextField author = new JTextField("Author", 25);
+        JButton submit = new JButton("Submit");
+        title.setBounds(0, 0, 400, 30);
 
-        setToRead.add(setToRead_title);
-        setToRead.setVisible(false);
+        setToRead.add(title);
         setToRead.setBounds(0,0,400,400);
-        setToRead_author.setBounds(0,45,400,30);
-        setToRead.add(setToRead_author);
+        author.setBounds(0,45,400,30);
+        setToRead.add(author);
         
-        setToRead_submit.setBounds(250, 90, 100, 30);
-        setToRead.add(setToRead_submit);
-
+        submit.setBounds(250, 90, 100, 30);
+        setToRead.add(submit);
+        setToRead.add(createMainPgButton());
         
-        // rate
+        JLabel results = new JLabel("");
+        JScrollPane scp = new JScrollPane(results);
+        scp.setBounds(10, 150, 380, 200);
+        setToRead.add(scp);
+        
+        submit.addActionListener(click -> {
+        	String retStr = LibraryLogic.setRead(books, title.getText(), author.getText());
+        	results.setText(retStr);
+        });
+        
+        panels.put("setToRead", setToRead);
+    }
+    
+    private static void createRatePanel() {
+    	// rate
         JPanel rate = new JPanel();
-        JTextField rate_title = new JTextField("Title");
-        JTextField rate_author = new JTextField("Author");
-        JButton rate_submit = new JButton("Submit");
-        JButton rate1 = new JButton("1");
-        JButton rate2 = new JButton("2");
-        JButton rate3 = new JButton("3");
-        JButton rate4 = new JButton("4");
-        JButton rate5 = new JButton("5");
         rate.setLayout(null);
-        rate1.setBounds(15, 90, 50, 30);
-        rate2.setBounds(95, 90, 50, 30);
-        rate3.setBounds(175, 90, 50, 30);
-        rate4.setBounds(255, 90, 50, 30);
-        rate5.setBounds(335, 90, 50, 30);
-        rate.add(rate1);
-        rate.add(rate2);
-        rate.add(rate3);
-        rate.add(rate4);
-        rate.add(rate5);
-
-                
-        f.add(rate);
-        
-        
-        
-        
-
-        
-        rate_title.setBounds(0, 40, 400, 30);
-        rate.add(rate_title);
-        rate.setVisible(false);
+        JTextField title = new JTextField("Title");
+        JTextField author = new JTextField("Author");
+        JButton submit = new JButton("Submit");
+        Integer[] ratings = {1, 2, 3, 4, 5};
+        JLabel rateLab = new JLabel("Rating");
+        JComboBox<Integer> rateVal = new JComboBox<>(ratings);
+        rateLab.setBounds(15, 80, 50, 15);
+        rateVal.setBounds(15, 100, 50, 30);
+        rate.add(rateVal);       
+        rate.add(rateLab);
+        title.setBounds(0, 40, 400, 30);
+        rate.add(title);
         rate.setBounds(0,0,400,400);
-        rate_author.setBounds(0,0,400,30);
-        rate.add(rate_author);
-        rate_submit.setBounds(250, 150, 100, 30);
-        rate.add(rate_submit);
-        // get books
+        author.setBounds(0,0,400,30);
+        rate.add(author);
+        submit.setBounds(250, 150, 100, 30);
+        rate.add(submit);
+        rate.add(createMainPgButton());
+        
+        JLabel results = new JLabel("");
+        JScrollPane scp = new JScrollPane(results);
+        scp.setBounds(10, 150, 380, 200);
+        rate.add(scp);
+        
+        submit.addActionListener(click -> {
+        	Book rateBook = LibraryLogic.getBooksWithName(title.getText(), author.getText(), books);
+        	if (rateBook == null) {results.setText("The Book with the given title & author doesn't exist!");}
+        	else {rateBook.setRating(rateVal.getSelectedIndex() + 1); results.setText(title.getText() + " has been rated!");}
+        });
+        panels.put("rate", rate);
+    }
+    
+    private static void createGetBooksPanel() {
+    	// get books
         JPanel getBooks = new JPanel();
+        getBooks.setLayout(null);
         JButton gb_author_button = new JButton("Author");
         //JButton gb_rating_button = new JButton("Rating");
         JButton gb_title_button = new JButton("Title");
@@ -168,10 +218,6 @@ public class Main {
         JButton gb_unread_button = new JButton("Unread");
         JLabel instruction = new JLabel("Select a filter...");
         instruction.setBounds(0,0,200, 30);
-        
-
-        f.add(getBooks);
-        getBooks.setLayout(null);
         getBooks.setBounds(0,0,400,400);
         gb_author_button.setBounds(105, 50, 100, 40);
         gb_unread_button.setBounds(105, 100, 100, 40);
@@ -182,30 +228,138 @@ public class Main {
         getBooks.add(gb_title_button);
         getBooks.add(gb_read_button);
         getBooks.add(instruction);
-
-        getBooks.setVisible(false);
-        // suggestRead
-        JPanel suggestRead = new JPanel();
-        JLabel suggestion = new JLabel("BOOK NAME, BY AUTHOR");
-        JButton confirmation = new JButton("ok!");
-        suggestion.setBounds(0,0,400,30);
-        confirmation.setBounds(250, 30, 100, 30);
-        suggestRead.setBounds(0,0,400,400);
-        suggestRead.setLayout(null);
-
-        f.add(suggestRead);
-        suggestRead.add(suggestion);
-        suggestRead.add(confirmation);
-        suggestRead.setVisible(true);
-
-        //
+        getBooks.add(createMainPgButton());
         
-
+        JTextArea results = new JTextArea("");
+        results.setEditable(false);
+        JScrollPane scp = new JScrollPane(results);
+        scp.setBounds(10, 150, 380, 200);
+        getBooks.add(scp);
         
+        gb_author_button.addActionListener(click -> {
+        	String retStr;
+        	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "author");
+        	if (sortedBooks.size() == 0) {retStr = "Your Library contains no books!";}
+        	else {
+        		StringBuilder sb = new StringBuilder();
+        		for (Book b : sortedBooks) {
+        			sb.append(b.toString() + "\n");
+        		}
+        		retStr = sb.toString();
+        	}
+        	results.setText(retStr);
+        });
         
+        gb_title_button.addActionListener(click -> {
+        	String retStr;
+        	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "title");
+        	if (sortedBooks.size() == 0) {retStr = "Your Library contains no books!";}
+        	else {
+        		StringBuilder sb = new StringBuilder();
+        		for (Book b : sortedBooks) {
+        			sb.append(b.toString() + "\n");
+        		}
+        		retStr = sb.toString();
+        	}
+        	results.setText(retStr);
+        });
+        
+        gb_read_button.addActionListener(click -> {
+        	String retStr;
+        	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "read");
+        	if (sortedBooks.size() == 0) {retStr = "You haven't read any books in your library!";}
+        	else {
+        		StringBuilder sb = new StringBuilder();
+        		for (Book b : sortedBooks) {
+        			sb.append(b.toString() + "\n");
+        		}
+        		retStr = sb.toString();
+        	}
+        	results.setText(retStr);
+        });
+        
+        gb_unread_button.addActionListener(click -> {
+        	String retStr;
+        	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "unread");
+        	if (sortedBooks.size() == 0) {retStr = "You have read every book in your library!";}
+        	else {
+        		StringBuilder sb = new StringBuilder();
+        		for (Book b : sortedBooks) {
+        			sb.append(b.toString() + "\n");
+        		}
+        		retStr = sb.toString();
+        	}
+        	results.setText(retStr);
+        });
+        
+        panels.put("getBooks", getBooks);
     }
     
+    private static void createSuggestPanel() {
+    	// suggestRead
+        JPanel suggestRead = new JPanel();
+        suggestRead.setLayout(null);
+        JTextArea suggestion = new JTextArea("");
+        suggestion.setEditable(false);
+        suggestion.setBounds(0,0,400,60);
+        suggestRead.setBounds(0,0,400,400);
+        suggestRead.add(suggestion);
+        JButton submit = new JButton("Get Suggestion!");
+        submit.setBounds(100, 150, 200, 30);
+        suggestRead.add(submit);
+        suggestRead.add(createMainPgButton());
+        
+        submit.addActionListener(click -> {
+        	Book b = LibraryLogic.selectUnread(books);
+        	if (b == null) {suggestion.setText("Congratulations, you have read every book in your library!");}
+        	else {suggestion.setText(b.toString());}
+        });
+        
+        panels.put("suggestRead", suggestRead);
+
+    }
+    
+    private static JButton createMainPgButton() {
+    	JButton ret = new JButton("Return to Main");
+    	ret.setBounds(250, 350, 150, 30);
+    	ret.addActionListener(click -> changePanel(panels.get("main")));
+    	return ret;
+    }
+
+    private static void createAndShowGUI() {
+       
+    	createMainPanel();  	
+    	createAddBookPanel();
+    	createAddBooksPanel();
+        createSearchPanel();
+        createReadPanel();   
+        createRatePanel();
+        createGetBooksPanel();
+        createSuggestPanel();
+                       
+    }
+    
+    private static void changePanel( JPanel p) {
+		f.getContentPane().removeAll();
+		p.setVisible(true);
+		f.add(p);	
+		f.revalidate();
+		f.repaint();
+		f.setVisible(true);
+	}
+    
   public static void main(String[] args) {
-    createAndShowGUI();
+      f.setLayout(null);
+      f.setSize(500,500); 
+      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      createAndShowGUI();
+      panels.get("main").setVisible(true);
+      f.add(panels.get("main"));
+      f.setVisible(true);
+      
   }
 }
+	
+	
+	
+	
