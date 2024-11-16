@@ -1,13 +1,18 @@
+// Authors: Elliott Cepin & Aarush Parvataneni
+// Filename: Main.java
+// Description: Contains the GUI View for the program.
+
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
-    private static HashMap<String, JPanel> panels = new HashMap<String, JPanel>();
-    private static JFrame f=new JFrame("My Library");
+    private static HashMap<String, JPanel> panels = new HashMap<String, JPanel>(); // hashmap that stores all panels we use in this GUI
+    private static JFrame f=new JFrame("My Library"); // f is the Frame that presents our GUI
     private static ArrayList<Book> books = new ArrayList<Book>();
-    
+
+    // sets up the panel for the main page
     private static void createMainPanel() {
     	 JPanel p = new JPanel();
     	 p.setLayout(null);
@@ -36,7 +41,8 @@ public class Main {
          }
          panels.put("main", p);
     }
-    
+
+    // sets up the panel where we can addBook
     private static void createAddBookPanel() {
     	// add Book
         JPanel addBook = new JPanel();
@@ -66,7 +72,8 @@ public class Main {
         });
         
     }
-    
+
+    // creates the panel for the addBooks command 	
     private static void createAddBooksPanel() {
     	// add Books
         JPanel addBooks = new JPanel();
@@ -94,7 +101,8 @@ public class Main {
         });
         panels.put("addBooks", addBooks);
     }
-    
+
+    // creates the Panel for the search command
     private static void createSearchPanel() {
     	// search
         JPanel search = new JPanel();
@@ -124,10 +132,11 @@ public class Main {
         submit.addActionListener(click -> {
         	String retStr;
         	if (searchChoice.getSelectedItem().equals("Title")) {
-                retStr = LibraryLogic.searchBooks(books, search_title.getText(), true);
+                retStr = LibraryLogic.searchBooks(books, search_title.getText(), true); // search by title and obtain the books in string form
         	} else if (searchChoice.getSelectedItem().equals("Author")) {
-                retStr = LibraryLogic.searchBooks(books, search_title.getText(), false);
+                retStr = LibraryLogic.searchBooks(books, search_title.getText(), false); // search by author and obtain the books in string form
         	} else {
+			// check if a valid input (int between 1-5) has been inputted
         		if (search_title.getText().length() == 1 && search_title.getText().charAt(0) > '0' && search_title.getText().charAt(0) < '6') {
                     retStr = LibraryLogic.searchBooksByRating(books, Integer.parseInt(search_title.getText()));
         		} else {
@@ -139,7 +148,8 @@ public class Main {
         
         panels.put("search", search);
     }
-    
+
+    // creates the panel for the setToRead command
     private static void createReadPanel() {
     	// setToRead
         JPanel setToRead = new JPanel();
@@ -170,7 +180,8 @@ public class Main {
         
         panels.put("setToRead", setToRead);
     }
-    
+
+    // creates the panel for the rate command
     private static void createRatePanel() {
     	// rate
         JPanel rate = new JPanel();
@@ -206,7 +217,8 @@ public class Main {
         });
         panels.put("rate", rate);
     }
-    
+
+    // creates the panel for getBooks
     private static void createGetBooksPanel() {
     	// get books
         JPanel getBooks = new JPanel();
@@ -236,7 +248,7 @@ public class Main {
         scp.setBounds(10, 150, 380, 200);
         getBooks.add(scp);
         
-        gb_author_button.addActionListener(click -> {
+        gb_author_button.addActionListener(click -> { // when user wants to sort by author
         	String retStr;
         	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "author");
         	if (sortedBooks.size() == 0) {retStr = "Your Library contains no books!";}
@@ -250,7 +262,7 @@ public class Main {
         	results.setText(retStr);
         });
         
-        gb_title_button.addActionListener(click -> {
+        gb_title_button.addActionListener(click -> { // when user wants to sort by title
         	String retStr;
         	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "title");
         	if (sortedBooks.size() == 0) {retStr = "Your Library contains no books!";}
@@ -264,7 +276,7 @@ public class Main {
         	results.setText(retStr);
         });
         
-        gb_read_button.addActionListener(click -> {
+        gb_read_button.addActionListener(click -> { // when user wants to sort by read
         	String retStr;
         	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "read");
         	if (sortedBooks.size() == 0) {retStr = "You haven't read any books in your library!";}
@@ -278,7 +290,7 @@ public class Main {
         	results.setText(retStr);
         });
         
-        gb_unread_button.addActionListener(click -> {
+        gb_unread_button.addActionListener(click -> { // when user wants to sort by unread
         	String retStr;
         	ArrayList<Book> sortedBooks = LibraryLogic.getSortedBooks(books, "unread");
         	if (sortedBooks.size() == 0) {retStr = "You have read every book in your library!";}
@@ -294,7 +306,8 @@ public class Main {
         
         panels.put("getBooks", getBooks);
     }
-    
+
+    // creates panel where user can ask for book suggestion 
     private static void createSuggestPanel() {
     	// suggestRead
         JPanel suggestRead = new JPanel();
@@ -318,7 +331,8 @@ public class Main {
         panels.put("suggestRead", suggestRead);
 
     }
-    
+
+    // method for creating the button that reroutes the user to the main page
     private static JButton createMainPgButton() {
     	JButton ret = new JButton("Return to Main");
     	ret.setBounds(250, 350, 150, 30);
@@ -326,6 +340,7 @@ public class Main {
     	return ret;
     }
 
+    // combines all the above methods to create all the panels
     private static void createAndShowGUI() {
        
     	createMainPanel();  	
@@ -338,20 +353,22 @@ public class Main {
         createSuggestPanel();
                        
     }
-    
+
+    // changes the panel displayed when we need to
     private static void changePanel( JPanel p) {
 		f.getContentPane().removeAll();
 		p.setVisible(true);
 		f.add(p);	
-		f.revalidate();
+		f.revalidate(); 
 		f.repaint();
 		f.setVisible(true);
 	}
-    
+
+  // main method that is run by the program
   public static void main(String[] args) {
       f.setLayout(null);
       f.setSize(500,500); 
-      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // to terminate the program when we close the window
       createAndShowGUI();
       panels.get("main").setVisible(true);
       f.add(panels.get("main"));
